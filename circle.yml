@@ -17,7 +17,9 @@ deployment:
   master:
     branch: master
     commands:
-      - yarn build && yarn copy-files-to-dist && yarn deploy
+      - yarn build
+      - yarn copy-files-to-dist
+      - yarn deploy
   releases:
     branch: releases
     commands:
