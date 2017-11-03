@@ -2,11 +2,6 @@
   Promotion Service 🍾💨
 </h1>
 
-[![CircleCI](https://circleci.com/gh/transferwise/promotion-service.svg?style=shield)](https://circleci.com/gh/transferwise/promotion-service)
-[![PRs Welcome][prs-badge]][prs]
-[![size][size-badge]][unpkg-dist]
-[![gzip size][gzip-badge]][unpkg-dist]
-
 ## The problem
 
 You want to promote various events to the user.
@@ -66,7 +61,7 @@ export default AwesomeController;
 Call this function to add a promotion
 
 - `promotedElement`: CSS selector for the promoted element
-- `position`: Position of the popover
+- `position`: Position of the popover. Possible values include [**'top', 'right', 'bottom', 'left'**]
 - `title`: Title displayed in the popover
 - `content`: Content displayed in the popover
 - `html`: Template for the popover content
