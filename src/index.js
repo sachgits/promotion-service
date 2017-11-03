@@ -5,8 +5,6 @@ import 'tw-styleguide-components/dist/js/styleguide-components';
 
 import promotionService from './promotion.service';
 
-import popover from '../../styleguide-components/src/help/pop-over/'
-
 export default angular
-  .module('Promotion', [ngCookies, popover])
+  .module('Promotion', [ngCookies, 'tw.styleguide-components'])
   .service('PromotionService', promotionService).name;
