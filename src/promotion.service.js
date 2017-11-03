@@ -29,7 +29,8 @@ class PromotionService {
       this.persistPromotions,
 
       addToPromotions,
-      createPromotion)
+      createPromotion
+    )
     (
       promotedElement,
       position,

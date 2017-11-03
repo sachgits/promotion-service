@@ -5,7 +5,7 @@ export default {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'promotion.service.bundle.js',
+    filename: 'index.js',
   },
   module: {
     rules: [

@@ -1,78 +1,83 @@
-# Promotion Service 💥🍾💨
+<h1 align="center">
+  Promotion Service 🍾💨
+</h1>
 
 [![CircleCI](https://circleci.com/gh/transferwise/promotion-service.svg?style=shield)](https://circleci.com/gh/transferwise/promotion-service)
+[![PRs Welcome][prs-badge]][prs]
+[![size][size-badge]][unpkg-dist]
+[![gzip size][gzip-badge]][unpkg-dist]
 
-A service for showing, adding, removing promotions. The promotions themselves can be serialized and stored under the `twPromotions` cookie key value, if they are added from the server or from anywhere else.
+## The problem
 
-The service will pick up the last promotion, check it's commence date and display it if it meets the display criteria. The `Array` of promotions should be at all time sorted in descending order by their commence date so that the last promotion is the closest to the current date. The service also removes the last promotion after it has displayed it, so that the user doesn't get the same promotion twice.
+You want to promote various events to the user.
 
-The structure of a promotion has the following shape:
+## This solution
 
-```javascript
-{
-  promotedElement,
-  promotionCommence,
-  promotionPopover: {
-    placement,
-    title,
-    content,
-    html,
-  },
-}
-```
+With the promotion service, you register promotions in which you nominate the highlighted element for the promotion and the event that he is promoting.
 
-For more details on the shape of the promotion object, check [this](https://github.com/mstaicu/promotion-service/blob/master/src/promotion.service.js#L149) factory function's comment.
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#API)
+- [Tasks](#Tasks)
 
-The structure of the `twPromotions` cookie value is that of an `Array`.
-
-```javascript
-[{
-  promotedElement,
-  promotionCommence,
-  promotionPopover: {
-    placement,
-    title,
-    content,
-    html,
-  },
-}]
-```
-
-## Usage
-
-### Installation
+## Installation
 
 ```
 npm install git+ssh://git@github.com/transferwise/promotion-service.git#{version-tag}
 ```
 
-### Usage in `frontend-apps`
+## Usage
 
-#### `Apps`
+> index.js
 
-Like a normal dependency in `frontend-apps` `/apps`, specify it in the `package.json` of your app.
+```javascript
+import awesomeController from './awesome.controller';
+import promotionService from 'promotion-service';
 
+export default angular
+  .module('MyAwesomeModule', [promotionService])
+  .controller('MyAwesomeController', awesomeController).name;
 ```
-{
-  "name": "tw.landing",
-  "include": {
-    "js": [
-      ...
-      "node_modules/promotion-service/promotion-service.min.js"
-    ]
+
+> awesome.controller.js
+
+```javascript
+class AwesomeController {
+  constructor(PromotionService) {
+    PromotionService.addPromotion('.promoted-element', 'right', 'Transferwise', 'Rules!');
+
+    PromotionService.showLastPromotion();
   }
 }
+
+AwesomeController.$inject = ['PromotionService'];
+
+export default AwesomeController;
+
 ```
 
-#### `Modules`
+## API
 
-No changes necessary, make sure the consuming apps have the dependency included.
+### addPromotion
 
-## Development
+> `function(promotedElement: String, position: String, title: String, content: String, html: String)`
 
-`npm` is used as the sole package manager and its scripts in `package.json` are used for tasks, with Webpack handling module loading and bundling using loaders. ES2015 is transpiled using Babel and the ESLint config we follow is [Airbnb's](https://github.com/airbnb/javascript).
+Call this function to add a promotion
 
-[Yarn](https://yarnpkg.com/) can be used instead of `npm`.
+- `promotedElement`: CSS selector for the promoted element
+- `position`: Position of the popover
+- `title`: Title displayed in the popover
+- `content`: Content displayed in the popover
+- `html`: Template for the popover content
+
+**returns** The promotion object
+
+### showLastPromotion
+
+> `function()`
+
+Shows the last promotion in the list of promotions, if its commence date has started, otherwise it doesn't display anything and it doesn't alter the promotions array. If the commence date has started, the promotion is displayed using the `PopoverService` and the promotion is removed from the promotions array.
 
 ### Tasks
 
@@ -99,19 +104,3 @@ npm run test:watch
 ```
 npm run build
 ```
-
-This is usually done by CircleCI, but it may be useful when trying out changes with local consumers.
-
-### Development pipeline
-
-All development happens on feature branches. On commits to any branch, CircleCI will run the tests. After a successful code review, Merge can be clicked and CircleCI will trigger a job again, building the bundle and releasing it to GitHub.
-
-1. Make changes on a feature branch
-1. **Bump package version** in `package.json` (we're following SemVer) and **add related new item in CHANGELOG.md**!
-1. Create a Pull Request
-1. Get reviews
-1. Merge using GitHub UI
-1. Wait for the CircleCI job to finish
-1. A GitHub release should be automatically published based on your new `CHANGELOG.md` item
-1. ???
-1. PROFIT
