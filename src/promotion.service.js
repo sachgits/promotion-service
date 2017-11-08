@@ -10,8 +10,8 @@ class PromotionService {
   }
 
   /**
-   * [addPromotion                Adds a new promotion to the twPromotions cookie
-   *                              array]
+   * [addPromotion                     Adds a new promotion to the twPromotions
+   *                                   cookie array]
    * @param  {String} promotedElement [CSS selector for the promoted element]
    * @param  {String} position        [Position of the popover]
    * @param  {String} title           [Title displayed in the popover]
@@ -29,15 +29,8 @@ class PromotionService {
       this.persistPromotions,
 
       addToPromotions,
-      createPromotion
-    )
-    (
-      promotedElement,
-      position,
-      title,
-      content,
-      html,
-    );
+      createPromotion,
+    )(promotedElement, position, title, content, html);
   }
 
   /**
@@ -71,8 +64,8 @@ class PromotionService {
         this.persistPromotions,
 
         sortByPromotionCommence,
-        getReverseTail)
-      (this.getPromotions());
+        getReverseTail,
+      )(this.getPromotions());
     }
 
     return hasDisplayedPromotion;
@@ -126,8 +119,8 @@ class PromotionService {
 
   /**
    * [getCookieObject]
-   * @param  {String} key [Cookie key/id to use for lookup]
-   * @return {Object}     [Returns the deserialized value of given cookie key]
+   * @param  {String} key    [Cookie key/id to use for lookup]
+   * @return {Object}        [Returns the deserialized value of given cookie key]
    */
   getCookieObject(key) {
     return this.cookieService.getObject(key);
@@ -148,6 +141,11 @@ class PromotionService {
 }
 
 /**
+ * Dependency injection
+ */
+PromotionService.$inject = ['$cookies', 'twPopOverService'];
+
+/**
  * [createPromotion                           Creates the promotion object, with
  *                                            the promotion commence date and
  *                                            popover metadata. Factory function]
@@ -159,6 +157,10 @@ class PromotionService {
  * @return {Object}                          [Promotion object]
  */
 function createPromotion(promotedElement, placement, title, content, html) {
+  /**
+   * TODO: Establish how and if the promotion commence date should be the same
+   * for all promotions
+   */
   const promotionCommence = Date.now();
 
   return {
@@ -240,9 +242,7 @@ function pushToArray(array, element) {
  * @return {Array}            [Sorted array]
  */
 function sortArray(objProp, descSort, array) {
-  return array.sort(
-    (a, b) => (descSort ? b[objProp] - a[objProp] : a[objProp] - b[objProp])
-  );
+  return array.sort((a, b) => (descSort ? b[objProp] - a[objProp] : a[objProp] - b[objProp]));
 }
 
 /**
@@ -269,20 +269,17 @@ function compose(...fns) {
  * @param  {Function} fn   [Input function]
  * @return {Function}
  */
-function curry(fn, arity = fn.length, nextCurried) {
-  return (nextCurried = prevArgs => (nextArg) => {
-    const args = [...prevArgs, nextArg];
+function curry(fn, arity = fn.length) {
+  return (function nextCurried(prevArgs) {
+    return (nextArg) => {
+      const args = prevArgs.concat([nextArg]);
 
-    if (args.length >= arity) {
-      return fn(...args);
-    }
-    return nextCurried(args);
-  })([]);
+      if (args.length >= arity) {
+        return fn(...args);
+      }
+      return nextCurried(args);
+    };
+  }([]));
 }
-
-/**
- * Dependency injection
- */
-PromotionService.$inject = ['$cookies', 'twPopOverService'];
 
 export default PromotionService;

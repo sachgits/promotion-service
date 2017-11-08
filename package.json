@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "copy:bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css demo/lib/",
-    "copy:demo": "mkdir demo/lib; npm run copy:bootstrap;",
+    "copy:demo": "mkdir demo/lib; npm run copy:bootstrap; npm run copy:fonts;",
+    "copy:fonts": "mkdir demo/fonts; cp node_modules/bootstrap/fonts/*.* demo/fonts; cp node_modules/transferwise-iconfont/fonts/*.* demo/fonts",
     "test": "npm run lint && jest",
     "test:watch": "jest --watch",
     "lint": "eslint src webpack.prod.js",
@@ -26,6 +27,7 @@
   },
   "homepage": "https://github.com/transferwise/promotion-service#readme",
   "devDependencies": {
+    "angular-mocks": "^1.6.6",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
@@ -38,12 +40,13 @@
     "git-directory-deploy": "^1.5.1",
     "jest": "^20.0.4",
     "release-to-github-with-changelog": "^1.1.4",
-    "webpack": "^3.1.0",
+    "transferwise-iconfont": "git+ssh://git@github.com/transferwise/iconfont.git",
     "webpack-dev-server": "^2.9.3"
   },
   "dependencies": {
     "angular": "^1.6.6",
     "angular-cookies": "^1.6.6",
-    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.4.1"
+    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.4.1",
+    "webpack": "^3.1.0"
   }
 }
