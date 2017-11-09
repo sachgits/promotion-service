@@ -40,7 +40,17 @@ export default angular
 ```javascript
 class AwesomeController {
   constructor(PromotionService) {
-    PromotionService.addPromotion('.promoted-element', 'right', 'Transferwise', 'Rules!');
+    var promotionObject = {
+      promotedElement: '.promoted-element',
+      promotionCommence: Date.now(),
+      promotionPopover: {
+        placement: 'right',
+        title: 'Popover title',
+        content: 'Popover content',
+      },
+    };
+
+    PromotionService.addPromotion(promotionObject);
 
     PromotionService.showLastPromotion();
   }
@@ -56,15 +66,94 @@ export default AwesomeController;
 
 ### addPromotion
 
-> `function(promotedElement: String, position: String, title: String, content: String, html: String)`
+> `function(promotionObject: Object)`
 
-Call this function to add a promotion
+- `promotionObject`: Object containing the promotion data and metadata.
 
-- `promotedElement`: CSS selector for the promoted element
-- `position`: Position of the popover. Possible values include [**'top', 'right', 'bottom', 'left'**]
-- `title`: Title displayed in the popover
-- `content`: Content displayed in the popover
-- `html`: Template for the popover content
+Call this function to add a promotion. The `promotionObject` should have the following shape:
+
+```javascript
+var promotionObject = {
+  promotedElement,
+  promotionCommence,
+  promotionPopover: {
+    placement,
+
+    title,
+    content,
+
+    html,
+  },
+}
+```
+
+Where the properties are:
+
+- `promotedElement: String`: CSS selector for the promoted element
+- `promotionCommence: Number`: Numeric value corresponding to the commence date of the promotion, i.e. from when should this promotion be displayed - **number must be in milliseconds**
+
+- Optional: `placement: String`: Popover placement. Possible values include [**'top', 'right', 'bottom', 'left'**]
+- `title: String`: Popover title
+- `content: String`: Popover content
+- Optional: `html: String`: Popover template
+
+When passing a custom template to the popover via the `html` property, the binding between the *template placeholders* and the *popover variables* are resolved in the following manner. Given the template:
+
+```javascript
+var promotionObject = {
+  ...
+  promotionPopover: {
+    ...
+    html: "
+      <button class='close popover-close'>&times;</button> \
+      <div className='popover-logo'> \
+        <img src='__logo__' alt='Logo' /> \
+      </div> \
+      <h3 class='popover-title'>__title__</h3> \
+      <div class='popover-content'> \
+        __content__ \
+      </div>",
+  },
+}
+```
+
+All the prefixed and suffixed words in the template by **double underscores** are mapped to the values of their equivalent properties in the `promotionPopover` object. For the following promotion object:
+
+```javascript
+var promotionObject = {
+  ...
+  promotionPopover: {
+    logo: 'Relative/Absolute path to the logo image',
+    title: 'Popover title',
+    content: 'Popover content',
+
+    html: "
+      <button class='close popover-close'>&times;</button> \
+      <div className='popover-logo'> \
+        <img src='__logo__' alt='Logo' /> \
+      </div> \
+      <h3 class='popover-title'>__title__</h3> \
+      <div class='popover-content'> \
+        __content__ \
+      </div>",
+  },
+}
+```
+
+We will get the following popover content:
+
+```html
+<button class='close popover-close'>&times;</button>
+<div className='popover-logo'>
+  <img src='Relative/Absolute path to the logo image' alt='Logo' />
+</div>
+<h3 class='popover-title'>Popover title</h3>
+<div class='popover-content'>
+  Popover content
+</div>
+```
+
+⚠️ If you're planing on using `img` elements in the popover template, make sure you use the `height` attribute as part of the `img` element in order to precompute the correct height of the popover element and ensure the right positioning. Otherwise, you will **break** _space-time continuum_.
 
 **returns** The promotion object
 
@@ -76,10 +165,16 @@ Shows the last promotion in the list of promotions, if its commence date has sta
 
 ### Tasks
 
-#### Install
+#### Install all the dependencies
 
 ```
 npm install
+```
+
+#### Run in development mode
+
+```
+npm run dev
 ```
 
 #### Test and lint

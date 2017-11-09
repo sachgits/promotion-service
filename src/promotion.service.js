@@ -12,14 +12,11 @@ class PromotionService {
   /**
    * [addPromotion                     Adds a new promotion to the twPromotions
    *                                   cookie array]
-   * @param  {String} promotedElement [CSS selector for the promoted element]
-   * @param  {String} position        [Position of the popover]
-   * @param  {String} title           [Title displayed in the popover]
-   * @param  {String} content         [Content displayed in the popover]
-   * @param  {String} html            [Template for the popover]
+   * @param  {Object} promotionObject [Object containing the promotion data and
+   *                                   metadata]
    * @return {Object}                 [Promotion object]
    */
-  addPromotion(promotedElement, position, title, content, html) {
+  addPromotion(promotionObject) {
     const sortByPromotionCommence = curry(sortArray)('promotionCommence')(true);
     const pushToPromotions = curry(pushToArray)(this.getPromotions());
 
@@ -27,10 +24,8 @@ class PromotionService {
 
     return compose(
       this.persistPromotions,
-
-      addToPromotions,
-      createPromotion,
-    )(promotedElement, position, title, content, html);
+      addToPromotions
+    )(promotionObject);
   }
 
   /**
@@ -144,36 +139,6 @@ class PromotionService {
  * Dependency injection
  */
 PromotionService.$inject = ['$cookies', 'twPopOverService'];
-
-/**
- * [createPromotion                           Creates the promotion object, with
- *                                            the promotion commence date and
- *                                            popover metadata. Factory function]
- * @param  {String} promotedElement          [CSS selector for the promoted element]
- * @param  {String} position                 [Position of the popover]
- * @param  {String} title                    [Title displayed in the popover]
- * @param  {String} content                  [Content displayed in the popover]
- * @param  {String} html                     [Template for the popover]
- * @return {Object}                          [Promotion object]
- */
-function createPromotion(promotedElement, placement, title, content, html) {
-  /**
-   * TODO: Establish how and if the promotion commence date should be the same
-   * for all promotions
-   */
-  const promotionCommence = Date.now();
-
-  return {
-    promotedElement,
-    promotionCommence,
-    promotionPopover: {
-      placement,
-      title,
-      content,
-      html,
-    },
-  };
-}
 
 /**
  * [checkPromotionCommence     Checks if the promotion commence date has started]

@@ -1,6 +1,16 @@
 class DemoController {
   constructor(PromotionService) {
-    PromotionService.addPromotion('.promoted-element', 'right', 'Transferwise', 'Rules!');
+    var promotionObject = {
+      promotedElement: '.promoted-element',
+      promotionCommence: Date.now(),
+      promotionPopover: {
+        placement: 'right-top',
+        title: 'Transferwise',
+        content: 'Rules!',
+      },
+    };
+
+    PromotionService.addPromotion(promotionObject);
 
     PromotionService.showLastPromotion();
   }
