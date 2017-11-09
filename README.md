@@ -92,7 +92,7 @@ Where the properties are:
 - `promotedElement: String`: CSS selector for the promoted element
 - `promotionCommence: Number`: Numeric value corresponding to the commence date of the promotion, i.e. from when should this promotion be displayed - **number must be in milliseconds**
 
-- Optional: `placement: String`: Popover placement. Possible values include [**'top', 'right', 'bottom', 'left'**]
+- Optional: `placement: String`: Popover placement. Possible values include [**'top', 'right', 'bottom', 'left', 'left-top', 'right-top'**]
 - `title: String`: Popover title
 - `content: String`: Popover content
 - Optional: `html: String`: Popover template
