@@ -13,8 +13,8 @@ With the promotion service, you register promotions in which you nominate the hi
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
-- [API](#API)
-- [Tasks](#Tasks)
+- [API](#api)
+- [Tasks](#tasks)
 
 ## Installation
 
