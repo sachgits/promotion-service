@@ -2,14 +2,8 @@
   Promotion Service 🍾💨
 </h1>
 
-<div align="center">
-  <h2>Awards</h2>
-
-  <div>
-    [![CircleCI branch](https://img.shields.io/circleci/project/github/transferwise/promotion-service/master.svg?style=flat-square)]()
-    [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-  </div>
-</div>
+[![CircleCI branch](https://img.shields.io/circleci/project/github/transferwise/promotion-service/master.svg?style=flat-square)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ## The problem
 
