@@ -24,7 +24,7 @@ class PromotionService {
 
     return compose(
       this.persistPromotions,
-      addToPromotions
+      addToPromotions,
     )(promotionObject);
   }
 

@@ -1,4 +1,4 @@
-require('angular');
-require('angular-mocks');
+import angular from 'angular';
+import 'angular-mocks';
 
-require('./src/index.js');
+import './src/index.js';

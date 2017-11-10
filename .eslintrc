@@ -1,12 +1,15 @@
 {
   "extends": "airbnb-base",
-  "parser": "babel-eslint",
   "env": {
     "jest": true,
-    "browser": true
+    "browser": true,
   },
+  "globals": {
+    angular: true,
+  },
+  "parser": "babel-eslint",
   "rules": {
     "no-unused-vars": 0,
-    "no-use-before-define": 0
+    "no-use-before-define": 0,
   }
 }

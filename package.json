@@ -9,10 +9,10 @@
     "copy:fonts": "mkdir demo/fonts; cp node_modules/bootstrap/fonts/*.* demo/fonts; cp node_modules/transferwise-iconfont/fonts/*.* demo/fonts",
     "test": "npm run lint && jest",
     "test:watch": "jest --watch",
-    "lint": "eslint src webpack.prod.js",
+    "lint": "eslint src",
     "build": "webpack --env=prod",
     "dev": "webpack-dev-server --env=dev --color",
-    "copy-files-to-dist": "cp circle.yml dist && cp package.json dist && cp CHANGELOG.md dist",
+    "copy-files-to-dist": "cp .circleci/circle.yml dist && cp package.json dist && cp CHANGELOG.md dist",
     "deploy": "git-directory-deploy --directory dist/ --branch releases --username CircleCI --email circleci@transferwise.com",
     "postinstall": "npm run copy:demo",
     "release-to-github": "release-to-github-with-changelog --branch=releases"
@@ -27,13 +27,12 @@
   },
   "homepage": "https://github.com/transferwise/promotion-service#readme",
   "devDependencies": {
-    "angular-mocks": "^1.6.6",
+    "angular-mocks": "^1.5.0",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
     "babel-loader": "^7.1.1",
     "babel-preset-env": "^1.6.1",
-    "bootstrap": "git+https://github.com/transferwise/bootstrap.git",
     "eslint": "^4.1.1",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.7.0",
@@ -44,8 +43,9 @@
     "webpack-dev-server": "^2.9.3"
   },
   "dependencies": {
-    "angular": "^1.6.6",
-    "angular-cookies": "^1.6.6",
+    "angular": "^1.5.0",
+    "angular-cookies": "^1.5.0",
+    "bootstrap": "git+https://github.com/transferwise/bootstrap.git",
     "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.4.1",
     "webpack": "^3.1.0"
   }

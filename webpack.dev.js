@@ -1,5 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
+import path from 'path';
+import webpack from 'webpack';
 
 const demoFileName = 'demo';
 
@@ -14,12 +14,8 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: [/node_modules/],
-        use: [
-          {
-            loader: 'babel-loader',
-          },
-        ],
+        exclude: /node_modules/,
+        use: 'babel-loader'
       },
     ],
   },

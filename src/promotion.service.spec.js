@@ -27,12 +27,17 @@ describe('Promotion service', () => {
   beforeEach(() => {
     document.body.insertAdjacentHTML('beforeend', promotedElementTemplate);
 
-    promotionServiceInstance.addPromotion(
-      '.promoted-element',
-      popoverOptions.placement,
-      popoverOptions.title,
-      popoverOptions.content,
-    );
+    const promotionObject = {
+      promotedElement: '.promoted-element',
+      promotionCommence: Date.now(),
+      promotionPopover: {
+        placement: 'right-top',
+        title: 'Transferwise',
+        content: 'Rules!',
+      },
+    };
+
+    promotionServiceInstance.addPromotion(promotionObject);
 
     promotionServiceInstance.showLastPromotion();
 

@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/promotion-service
+    docker:
+      - image: circleci/node:8.5.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: promotion-service-deps-{{ checksum "package.json" }}
+      - run:
+          name: Install project dependencies
+          command: npm install
+      - run:
+          name: Run tests
+          command: npm run test
+      - save_cache:
+          key: promotion-service-deps-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  test:
+    docker:
+      - image: circleci/node:8.5.0
+    steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: npm run test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

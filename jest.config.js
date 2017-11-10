@@ -1,4 +1,3 @@
 module.exports = {
-  verbose: true,
-  setupTestFrameworkScriptFile: './jest.init.js'
+  setupTestFrameworkScriptFile: '<rootDir>/jest.init.js',
 };
