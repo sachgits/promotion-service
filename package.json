@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Promotion service",
   "main": "dist/index.js",
+  "license": "MIT",
   "scripts": {
     "copy:bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css demo/lib/",
     "copy:demo": "mkdir demo/lib; npm run copy:bootstrap; npm run copy:fonts;",
@@ -46,7 +47,7 @@
     "angular": "^1.5.0",
     "angular-cookies": "^1.5.0",
     "bootstrap": "git+https://github.com/transferwise/bootstrap.git",
-    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.4.1",
+    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.5.0",
     "webpack": "^3.1.0"
   }
 }
