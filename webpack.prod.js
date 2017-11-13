@@ -1,7 +1,7 @@
-import webpack from 'webpack';
-import path from 'path';
+var webpack =  require('webpack');
+var path = require('path');
 
-export default {
+module.exports = {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
@@ -11,8 +11,8 @@ export default {
     rules: [
       {
         test: /\.js$/,
+        exclude: [path.resolve(__dirname, 'node_modules')],
         use: 'babel-loader',
-        exclude: /node_modules/,
       },
     ],
   },
