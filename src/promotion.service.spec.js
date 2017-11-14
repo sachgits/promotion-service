@@ -10,7 +10,7 @@ describe('Promotion service', () => {
     title: 'Transferwise',
     content: 'Rules',
     info: 'More info',
-    html:
+    template:
       '<div class="popover-title">__title__</div>\n' +
       '<div class="popover-content">__content__</div>\n' +
       '<div class="popover-info">__info__</div>',

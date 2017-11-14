@@ -85,7 +85,7 @@ var promotionObject = {
     title,
     content,
 
-    html,
+    template,
   },
 }
 ```
@@ -96,18 +96,18 @@ Where the properties are:
 - `promotionCommence: Number`: Numeric value corresponding to the commence date of the promotion, i.e. from when should this promotion be displayed - **number must be in milliseconds**
 
 - Optional: `placement: String`: Popover placement. Possible values include [**'top', 'right', 'bottom', 'left', 'left-top', 'right-top'**]
-- `title: String`: Popover title
-- `content: String`: Popover content
-- Optional: `html: String`: Popover template
+- `title: String`: Default title
+- `content: String`: Default content value
+- Optional: `template: String`: Base HTML to use when creating the popover, i.e. popover template
 
-When passing a custom template to the popover via the `html` property, the binding between the *template placeholders* and the *popover variables* are resolved in the following manner. Given the template:
+When passing a custom template to the popover via the `template` property, the binding between the *template placeholders* and the *popover variables* are resolved in the following manner. Given the template:
 
 ```javascript
 var promotionObject = {
   ...
   promotionPopover: {
     ...
-    html: "
+    template: "
       <button class='close popover-close'>&times;</button> \
       <div className='popover-logo'> \
         <img src='__logo__' alt='Logo' /> \
@@ -130,7 +130,7 @@ var promotionObject = {
     title: 'Popover title',
     content: 'Popover content',
 
-    html: "
+    template: "
       <button class='close popover-close'>&times;</button> \
       <div className='popover-logo'> \
         <img src='__logo__' alt='Logo' /> \
