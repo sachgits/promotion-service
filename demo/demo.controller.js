@@ -7,6 +7,7 @@ class DemoController {
         placement: 'right-top',
         title: 'Transferwise',
         content: 'Rules!',
+        modalMode: true,
       },
     };
 

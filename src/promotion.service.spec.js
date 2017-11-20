@@ -6,14 +6,15 @@ describe('Promotion service', () => {
     "<a class='promoted-element'>Show a popover next to this element</a>";
 
   const popoverOptions = {
-    placement: 'right',
-    title: 'Transferwise',
-    content: 'Rules',
-    info: 'More info',
-    template:
-      '<div class="popover-title">__title__</div>\n' +
-      '<div class="popover-content">__content__</div>\n' +
-      '<div class="popover-info">__info__</div>',
+    title: '<span>Transferwise</span>',
+    content: '<span>Rules</span>',
+    html: true,
+    image: 'http://transferwise.com/logo.png',
+    template: '<div class="popover"> \n' +
+          '<h3 class="popover-title"></h3> \n' +
+          '<img class="popover-image" /> \n' +
+          '<div class="popover-content"></div> \n' +
+        '</div>',
   };
 
   beforeEach(angular.mock.module('Promotion'));
@@ -24,47 +25,65 @@ describe('Promotion service', () => {
     }),
   );
 
-  beforeEach(() => {
-    document.body.insertAdjacentHTML('beforeend', promotedElementTemplate);
-
-    const promotionObject = {
-      promotedElement: '.promoted-element',
-      promotionCommence: Date.now(),
-      promotionPopover: {
-        placement: 'right-top',
-        title: 'Transferwise',
-        content: 'Rules!',
-      },
-    };
-
-    promotionServiceInstance.addPromotion(promotionObject);
-
-    promotionServiceInstance.showLastPromotion();
-
-    popover = document.body.querySelector('.popover');
-  });
-
-  afterEach(() => {
-    document.body.removeChild(document.querySelector('.promoted-element'));
-    document.body.removeChild(document.querySelector('.popover'));
-  });
-
   test('Promotion service loaded', () => {
     expect(typeof promotionServiceInstance).toBe('object');
   });
 
-  test('Promotion is added and visible', () => {
-    const popoverAppended = document.body.contains(popover);
-    const popoverVisible = !popover.classList.contains('scale-down');
-    const popoverVisibility = popoverAppended && popoverVisible;
+  describe('when we add a promotion and show the last promotion', () => {
+    beforeEach(() => {
+      document.body.insertAdjacentHTML('beforeend', promotedElementTemplate);
 
-    expect(popoverVisibility).toBe(true);
-  });
+      const promotionObject = {
+        promotedElement: '.promoted-element',
+        promotionCommence: Date.now(),
+        promotionPopover: popoverOptions,
+      };
 
-  test('Promotion has the right title', () => {
-    const popoverTitleElement = popover.querySelector('.popover-title');
-    const popoverTitle = popoverTitleElement && popoverTitleElement.innerHTML.trim();
+      promotionServiceInstance.addPromotion(promotionObject);
 
-    expect(popoverTitle).toBe(popoverOptions.title);
+      promotionServiceInstance.showLastPromotion();
+
+      popover = document.body.querySelector('.popover');
+    });
+
+    afterEach(() => {
+      document.body.removeChild(document.querySelector('.promoted-element'));
+      document.body.removeChild(document.querySelector('.popover'));
+    });
+
+    test('Promotion is added and visible', () => {
+      const popoverAppended = document.body.contains(popover);
+      const popoverVisible = !popover.classList.contains('scale-down');
+      const popoverVisibility = popoverAppended && popoverVisible;
+
+      expect(popoverVisibility).toBe(true);
+    });
+
+    test('Promotion has the right title', () => {
+      const popoverTitleElement = popover.querySelector('.popover-title');
+      const popoverTitle = popoverTitleElement && popoverTitleElement.innerHTML.trim();
+
+      expect(popoverTitle).toBe(popoverOptions.title);
+    });
+
+    test('Promotion has the right image', () => {
+      const popoverImageElement = popover.querySelector('.popover-image');
+      const popoverImageURL = popoverImageElement && popoverImageElement.getAttribute('src');
+
+      expect(popoverImageURL).toBe(popoverOptions.image);
+    });
+
+    describe('when clicking on the body element', () => {
+      beforeEach(() => {
+        document.body.click();
+      });
+
+      test('Promotion popover should not be visible', () => {
+        const popoverAppended = document.body.contains(popover);
+        const popoverNotVisible = popover.classList.contains('scale-down');
+
+        expect(popoverAppended && popoverNotVisible).toBe(true);
+      });
+    });
   });
 });

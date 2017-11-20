@@ -86,6 +86,8 @@ var promotionObject = {
     content,
 
     template,
+
+    html,
   },
 }
 ```
@@ -98,65 +100,26 @@ Where the properties are:
 - Optional: `placement: String`: Popover placement. Possible values include [**'top', 'right', 'bottom', 'left', 'left-top', 'right-top'**]
 - `title: String`: Default title
 - `content: String`: Default content value
-- Optional: `template: String`: Base HTML to use when creating the popover, i.e. popover template
 
-When passing a custom template to the popover via the `template` property, the binding between the *template placeholders* and the *popover variables* are resolved in the following manner. Given the template:
+- Optional: `html: Boolean`: Insert HTML into the popover. If false, `insertAdjacentText` method will be used to insert content into the DOM. Use text if you're worried about XSS attacks.
+- Optional: `template: String`: Base HTML to use when creating the popover, i.e. popover template. Ex:
 
 ```javascript
 var promotionObject = {
   ...
   promotionPopover: {
     ...
-    template: "
-      <button class='close popover-close'>&times;</button> \
-      <div className='popover-logo'> \
-        <img src='__logo__' alt='Logo' /> \
-      </div> \
-      <h3 class='popover-title'>__title__</h3> \
-      <div class='popover-content'> \
-        __content__ \
-      </div>",
-  },
+    template: '<div class="popover"> \n' +
+      '<h3 class="popover-title"></h3> \n' +
+      '<img class="popover-image" /> \n' +
+      '<div class="popover-content"></div> \n' +
+    '</div>',
+  }
 }
 ```
 
-All the prefixed and suffixed words in the template by **double underscores** are mapped to the values of their equivalent properties in the `promotionPopover` object. For the following promotion object:
-
-```javascript
-var promotionObject = {
-  ...
-  promotionPopover: {
-    logo: 'Relative/Absolute path to the logo image',
-    title: 'Popover title',
-    content: 'Popover content',
-
-    template: "
-      <button class='close popover-close'>&times;</button> \
-      <div className='popover-logo'> \
-        <img src='__logo__' alt='Logo' /> \
-      </div> \
-      <h3 class='popover-title'>__title__</h3> \
-      <div class='popover-content'> \
-        __content__ \
-      </div>",
-  },
-}
-```
-
-We will get the following popover content:
-
-```html
-<button class='close popover-close'>&times;</button>
-<div className='popover-logo'>
-  <img src='Relative/Absolute path to the logo image' alt='Logo' />
-</div>
-<h3 class='popover-title'>Popover title</h3>
-<div class='popover-content'>
-  Popover content
-</div>
-```
-
-⚠️ If you're planing on using `img` elements in the popover template, make sure you use the `height` attribute as part of the `img` element in order to precompute the correct height of the popover element and ensure the right positioning. Otherwise, you will **break** _space-time continuum_.
+- Optional: `modalMode: Boolean`: Use this flag if you want the popover to morph into a modal with overlay when the viewport width is less than 991 pixels
+- Optional: `image: String`: Use this property to store a relative / absolute URL. It should be used with the `template` property in order to define the image element in the popover markup.
 
 **returns** The promotion object
 
