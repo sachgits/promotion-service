@@ -87,7 +87,7 @@ var promotionObject = {
 
     template,
 
-    html,
+    contentHtml,
   },
 }
 ```
@@ -97,11 +97,11 @@ Where the properties are:
 - `promotedElement: String`: CSS selector for the promoted element
 - `promotionCommence: Number`: Numeric value corresponding to the commence date of the promotion, i.e. from when should this promotion be displayed - **number must be in milliseconds**
 
-- Optional: `placement: String`: Popover placement. Possible values include [**'top', 'right', 'bottom', 'left', 'left-top', 'right-top'**]
 - `title: String`: Default title
 - `content: String`: Default content value
+- `placement: String`: Popover placement. Possible values include [**'top', 'right', 'bottom', 'left', 'left-top', 'right-top'**]
 
-- Optional: `html: Boolean`: Insert HTML into the popover. If false, `insertAdjacentText` method will be used to insert content into the DOM. Use text if you're worried about XSS attacks.
+- Optional: `image: String`: Use this property to store a relative / absolute URL. It should be used with the `template` property in order to define the image element in the popover markup.
 - Optional: `template: String`: Base HTML to use when creating the popover, i.e. popover template. Ex:
 
 ```javascript
@@ -117,9 +117,8 @@ var promotionObject = {
   }
 }
 ```
-
+- Optional: `contentHtml: Boolean`: Insert HTML into the popover. If false, `insertAdjacentText` method will be used to insert content into the DOM. Use text if you're worried about XSS attacks.
 - Optional: `modalMode: Boolean`: Use this flag if you want the popover to morph into a modal with overlay when the viewport width is less than 991 pixels
-- Optional: `image: String`: Use this property to store a relative / absolute URL. It should be used with the `template` property in order to define the image element in the popover markup.
 
 **returns** The promotion object
 

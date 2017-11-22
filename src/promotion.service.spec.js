@@ -8,7 +8,7 @@ describe('Promotion service', () => {
   const popoverOptions = {
     title: '<span>Transferwise</span>',
     content: '<span>Rules</span>',
-    html: true,
+    contentHtml: true,
     image: 'http://transferwise.com/logo.png',
     template: '<div class="popover"> \n' +
           '<h3 class="popover-title"></h3> \n' +
