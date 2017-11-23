@@ -1,6 +1,6 @@
 {
   "name": "promotion-service",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Promotion service",
   "main": "dist/index.js",
   "license": "MIT",
@@ -12,10 +12,9 @@
     "test:watch": "jest --watch",
     "lint": "eslint src",
     "build": "webpack --env=prod",
-    "dev": "webpack-dev-server --env=dev --color",
+    "dev": "npm run copy:demo && webpack-dev-server --env=dev --color",
     "copy-files-to-dist": "cp .circleci/circle.yml dist && cp package.json dist && cp CHANGELOG.md dist",
     "deploy": "git-directory-deploy --directory dist/ --branch releases --username CircleCI --email circleci@transferwise.com",
-    "postinstall": "npm run copy:demo",
     "release-to-github": "release-to-github-with-changelog --branch=releases"
   },
   "repository": {
