@@ -1,21 +1,21 @@
 {
-  "name": "promotion-service",
-  "version": "1.0.1",
+  "name": "@transferwise/promotion-service",
+  "version": "1.0.2",
   "description": "Promotion service",
   "main": "dist/index.js",
-  "license": "MIT",
+  "author": "TransferWise Ltd.",
+  "license": "UNLICENSED",
   "scripts": {
     "copy:bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css demo/lib/",
-    "copy:demo": "mkdir demo/lib; npm run copy:bootstrap; npm run copy:fonts;",
-    "copy:fonts": "mkdir demo/fonts; cp node_modules/bootstrap/fonts/*.* demo/fonts; cp node_modules/transferwise-iconfont/fonts/*.* demo/fonts",
-    "test": "npm run lint && jest",
+    "copy:demo": "mkdir demo/lib; npm run copy:bootstrap;",
+    "test": "npm-run-all check-release-to-github lint jest",
     "test:watch": "jest --watch",
+    "check-release-to-github": "release-to-github-with-changelog-pre-release-checks",
     "lint": "eslint src",
+    "jest": "jest",
     "build": "webpack --env=prod",
-    "dev": "npm run copy:demo && webpack-dev-server --env=dev --color",
-    "copy-files-to-dist": "cp .circleci/circle.yml dist && cp package.json dist && cp CHANGELOG.md dist",
-    "deploy": "git-directory-deploy --directory dist/ --branch releases --username CircleCI --email circleci@transferwise.com",
-    "release-to-github": "release-to-github-with-changelog --branch=releases"
+    "start": "npm run copy:demo && webpack-dev-server --env=dev --color",
+    "release-to-github": "release-to-github-with-changelog"
   },
   "repository": {
     "type": "git",
@@ -36,10 +36,10 @@
     "eslint": "^4.1.1",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.7.0",
-    "git-directory-deploy": "^1.5.1",
     "jest": "^20.0.4",
+    "npm-run-all": "^4.1.2",
     "release-to-github-with-changelog": "^1.1.4",
-    "transferwise-iconfont": "git+ssh://git@github.com/transferwise/iconfont.git",
+    "uglifyjs-webpack-plugin": "^1.1.0",
     "webpack-dev-server": "^2.9.3"
   },
   "dependencies": {

@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/promotion-service
     docker:
       - image: circleci/node:8.5.0
     steps:
@@ -11,10 +10,26 @@ jobs:
       - run:
           name: Install project dependencies
           command: npm install
-      - run:
-          name: Run tests
-          command: npm run test
       - save_cache:
           key: promotion-service-deps-{{ checksum "package.json" }}
           paths:
             - node_modules
+      - run:
+          name: Run tests
+          command: npm run test
+      - run:
+          name: Build module
+          command: npm run build
+      - run:
+          name: release
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+              then npm run release-to-github;
+            fi
+      - run:
+          name: publish
+          command: |
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+              then npm publish --access=public;
+            fi
