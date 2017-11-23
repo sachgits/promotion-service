@@ -1,6 +1,6 @@
-var webpack =  require('webpack');
-var path = require('path');
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -17,8 +17,20 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new UglifyJsPlugin(),
+  plugins: [new webpack.optimize.ModuleConcatenationPlugin(), new UglifyJsPlugin()],
+  externals: [
+    {
+      angular: 'angular',
+      'tw-styleguide-components/dist/js/styleguide-components': {
+        var: "''",
+        commonjs: 'tw-styleguide-components/dist/js/styleguide-components',
+        commonjs2: 'tw-styleguide-components/dist/js/styleguide-components',
+      },
+      'angular-cookies': {
+        var: "'ngCookies'",
+        commonjs: 'angular-cookies',
+        commonjs2: 'angular-cookies',
+      },
+    },
   ],
 };

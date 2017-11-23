@@ -21,12 +21,6 @@ jobs:
           name: Build module
           command: npm run build
       - run:
-          name: release
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ];
-              then npm run release-to-github;
-            fi
-      - run:
           name: publish
           command: |
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
