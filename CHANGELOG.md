@@ -1,3 +1,6 @@
+# v1.0.3
+## Change the angular module name to be consistent with the organisation naming convention
+
 # v1.0.2
 ## Add npm publishing capabilities via CircleCI
 
