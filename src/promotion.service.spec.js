@@ -17,11 +17,11 @@ describe('Promotion service', () => {
         '</div>',
   };
 
-  beforeEach(angular.mock.module('Promotion'));
+  beforeEach(angular.mock.module('tw.promotion'));
 
   beforeEach(
     angular.mock.inject(($injector) => {
-      promotionServiceInstance = $injector.get('PromotionService');
+      promotionServiceInstance = $injector.get('tw.promotionService');
     }),
   );
 
