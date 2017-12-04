@@ -1,6 +1,6 @@
 {
   "name": "@transferwise/promotion-service",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Promotion service",
   "main": "dist/index.js",
   "author": "TransferWise Ltd.",
@@ -40,7 +40,7 @@
     "eslint-plugin-import": "^2.7.0",
     "jest": "^20.0.4",
     "npm-run-all": "^4.1.2",
-    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.6.3",
+    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.7.0",
     "uglifyjs-webpack-plugin": "^1.1.0",
     "webpack": "^3.1.0",
     "webpack-dev-server": "^2.9.3"
@@ -49,7 +49,7 @@
     "angular": "^1.5.0",
     "angular-cookies": "^1.5.0",
     "bootstrap": "git+https://github.com/transferwise/bootstrap.git",
-    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.6.3",
+    "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.7.0",
     "webpack": "^3.1.0"
   }
 }
