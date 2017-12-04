@@ -1,6 +1,6 @@
 {
   "name": "@transferwise/promotion-service",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Promotion service",
   "main": "dist/index.js",
   "author": "TransferWise Ltd.",
