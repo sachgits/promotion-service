@@ -1,6 +1,6 @@
 class DemoController {
   constructor(PromotionService) {
-    var promotionObject = {
+    const promotionObject = {
       promotedElement: '.promoted-element',
       promotionCommence: Date.now(),
       promotionPopover: {
@@ -17,6 +17,6 @@ class DemoController {
   }
 }
 
-DemoController.$inject = ['PromotionService'];
+DemoController.$inject = ['tw.promotionService'];
 
 export default DemoController;

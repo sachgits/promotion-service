@@ -5,3 +5,4 @@ npm-debug.log
 *.iws
 *.iml
 demo
+dist
