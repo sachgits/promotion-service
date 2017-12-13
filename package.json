@@ -1,6 +1,6 @@
 {
   "name": "@transferwise/promotion-service",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "description": "Promotion service",
   "main": "dist/index.js",
   "author": "TransferWise Ltd.",
@@ -32,6 +32,8 @@
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
     "babel-loader": "^7.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "bootstrap": "git+https://github.com/transferwise/bootstrap.git",
     "eslint": "^4.1.1",

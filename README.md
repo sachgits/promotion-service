@@ -45,7 +45,8 @@ class AwesomeController {
   constructor(PromotionService) {
     var promotionObject = {
       promotedElement: '.promoted-element',
-      promotionCommence: Date.now(),
+      promotionCommence: Date.now() + 10000,
+      promotionId: 'test-promotion',
       promotionPopover: {
         placement: 'right',
         title: 'Popover title',
@@ -70,6 +71,7 @@ export default AwesomeController;
 ### addPromotion
 
 > `function(promotionObject: Object)`
+**returns** The array of promotions
 
 - `promotionObject`: Object containing the promotion data and metadata.
 
@@ -79,15 +81,13 @@ Call this function to add a promotion. The `promotionObject` should have the fol
 var promotionObject = {
   promotedElement,
   promotionCommence,
+  promotionId,
+
   promotionPopover: {
     placement,
 
     title,
     content,
-
-    template,
-
-    contentHtml,
   },
 }
 ```
@@ -96,6 +96,7 @@ Where the properties are:
 
 - `promotedElement: String`: CSS selector for the promoted element
 - `promotionCommence: Number`: Numeric value corresponding to the commence date of the promotion, i.e. from when should this promotion be displayed - **number must be in milliseconds**
+- `promotionId: String`: The ID of the promotion. **This must be a unique value.**
 
 - `title: String`: Default title
 - `content: String`: Default content value
@@ -118,15 +119,16 @@ var promotionObject = {
 }
 ```
 - Optional: `contentHtml: Boolean`: Insert HTML into the popover. If false, `insertAdjacentText` method will be used to insert content into the DOM. Use text if you're worried about XSS attacks.
+- Optional: `container: String`: Appends the popover to a specific element. Example: `container: 'body'`. This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element - which will prevent the popover from floating away from the triggering element during a window resize.
+
 - Optional: `modalMode: Boolean`: Use this flag if you want the popover to morph into a modal with overlay when the viewport width is less than 991 pixels
+- Optional: `promotedElementIsFixed: Boolean`: This flag adds an inline style CSS property for `position` with the value `fixed` on the popover element.
 
-**returns** The promotion object
-
-### showLastPromotion
+### showCommencingPromotion
 
 > `function()`
 
-Shows the last promotion in the list of promotions, if its commence date has started, otherwise it doesn't display anything and it doesn't alter the promotions array. If the commence date has started, the promotion is displayed using the `PopoverService` and the promotion is removed from the promotions array.
+Shows the last promotion in the list of promotions, if its commence date has started, otherwise it doesn't display anything and it doesn't alter the promotions array. If the commence date has started, the promotion is displayed using the `PopoverService`.
 
 ### Tasks
 

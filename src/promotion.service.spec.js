@@ -10,11 +10,12 @@ describe('Promotion service', () => {
     content: '<span>Rules</span>',
     contentHtml: true,
     image: 'http://transferwise.com/logo.png',
-    template: '<div class="popover"> \n' +
-          '<h3 class="popover-title"></h3> \n' +
-          '<img class="popover-image" /> \n' +
-          '<div class="popover-content"></div> \n' +
-        '</div>',
+    template:
+      '<div class="popover"> \n' +
+      '<h3 class="popover-title"></h3> \n' +
+      '<img class="popover-image" /> \n' +
+      '<div class="popover-content"></div> \n' +
+      '</div>',
   };
 
   beforeEach(angular.mock.module('tw.promotion'));
@@ -36,12 +37,13 @@ describe('Promotion service', () => {
       const promotionObject = {
         promotedElement: '.promoted-element',
         promotionCommence: Date.now(),
+        promotionId: `promotion-${Math.random()}`,
         promotionPopover: popoverOptions,
       };
 
       promotionServiceInstance.addPromotion(promotionObject);
 
-      promotionServiceInstance.showLastPromotion();
+      promotionServiceInstance.showCommencingPromotion();
 
       popover = document.body.querySelector('.popover');
     });
@@ -51,7 +53,7 @@ describe('Promotion service', () => {
       document.body.removeChild(document.querySelector('.popover'));
     });
 
-    test('Promotion is added and visible', () => {
+    test('promotion is added and visible', () => {
       const popoverAppended = document.body.contains(popover);
       const popoverVisible = !popover.classList.contains('scale-down');
       const popoverVisibility = popoverAppended && popoverVisible;
@@ -59,14 +61,14 @@ describe('Promotion service', () => {
       expect(popoverVisibility).toBe(true);
     });
 
-    test('Promotion has the right title', () => {
+    test('promotion has the right title', () => {
       const popoverTitleElement = popover.querySelector('.popover-title');
       const popoverTitle = popoverTitleElement && popoverTitleElement.innerHTML.trim();
 
       expect(popoverTitle).toBe(popoverOptions.title);
     });
 
-    test('Promotion has the right image', () => {
+    test('promotion has the right image', () => {
       const popoverImageElement = popover.querySelector('.popover-image');
       const popoverImageURL = popoverImageElement && popoverImageElement.getAttribute('src');
 
@@ -78,7 +80,7 @@ describe('Promotion service', () => {
         document.body.click();
       });
 
-      test('Promotion popover should not be visible', () => {
+      test('promotion popover should not be visible', () => {
         const popoverAppended = document.body.contains(popover);
         const popoverNotVisible = popover.classList.contains('scale-down');
 

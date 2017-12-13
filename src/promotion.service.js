@@ -2,11 +2,6 @@ class PromotionService {
   constructor($cookies, popoverService) {
     this.cookieService = $cookies;
     this.popoverService = popoverService;
-
-    this.persistPromotions = this.persistPromotions.bind(this);
-    this.displayPromotion = this.displayPromotion.bind(this);
-    this.removeLastPromotion = this.removeLastPromotion.bind(this);
-    this.hidePromotion = this.hidePromotion.bind(this);
   }
 
   /**
@@ -14,68 +9,77 @@ class PromotionService {
    *                                   cookie array]
    * @param  {Object} promotionObject [Object containing the promotion data and
    *                                   metadata]
-   * @return {Object}                 [Promotion object]
+   * @return {Array}                  [Promotions array]
    */
-  addPromotion(promotionObject) {
-    const sortByPromotionCommence = curry(sortArray)('promotionCommence')(true);
+  addPromotion = (promotionObject) => {
     const pushToPromotions = curry(pushToArray)(this.getPromotions());
+    const addToPromotions = compose(pushToPromotions, this.checkExistingPromotion);
 
-    const addToPromotions = compose(sortByPromotionCommence, pushToPromotions);
-
-    return compose(
-      this.persistPromotions,
-      addToPromotions,
-    )(promotionObject);
-  }
+    return compose(this.savePromotions, addToPromotions)(promotionObject);
+  };
 
   /**
-   * [showLastPromotion         Displays the popover for the last promotion
-   *                            stored in the twPromotions cookies array]
+   * [showCommencingPromotion   Displays the popover for the last promotion
+   *                            stored in the twPromotions cookies array, i.e.
+   *                            the promotion that is due to commence.]
    * @return {Object}          [Last promotion object or null]
    */
-  showLastPromotion() {
-    return compose(
-      this.removeLastPromotion,
+  showCommencingPromotion = () =>
+    compose(
+      this.addViewedPromotion,
+      markPromotionAsViewed,
       this.displayPromotion,
-
+      checkDisplayStatus,
       checkPromotionCommence,
       getReverseHead,
     )(this.getPromotions());
-  }
 
   /**
-   * [removeLastPromotion                    Removes the last promotion and saves
-   *                                         the new promotions state in the
-   *                                        'twPromotions' cookie]
-   * @param  {Object} hasDisplayedPromotion [Promotion object or null]
-   * @return {Array}                        [Returns the list of promotions except
-   *                                        the last one]
+   * [addViewedPromotion               Update the promotions cookie by adding
+   *                                   back the last viewed promotion with a
+   *                                   'isRead' flag]
+   * @param  {Object} viewedPromotion
+   * @return {Object}
    */
-  removeLastPromotion(hasDisplayedPromotion) {
-    if (hasDisplayedPromotion) {
-      const sortByPromotionCommence = curry(sortArray)('promotionCommence')(true);
+  addViewedPromotion = (promotion) => {
+    if (promotion) {
+      const filteredPromotions = this.getPromotions().filter(
+        savedPromotion => savedPromotion.promotionId !== promotion.promotionId,
+      );
+      const pushToPromotions = curry(pushToArray)(filteredPromotions);
 
-      return compose(
-        this.persistPromotions,
-
-        sortByPromotionCommence,
-        getReverseTail,
-      )(this.getPromotions());
+      return compose(this.savePromotions, pushToPromotions)(promotion);
     }
 
-    return hasDisplayedPromotion;
-  }
+    return promotion;
+  };
+
+  /**
+   * [checkExistingPromotion            Checks if the promotion that we want to
+   *                                    add already exists in the promotion
+   *                                    cookies array]
+   * @param  {Object} promotionObject
+   * @return {Object}
+   */
+  checkExistingPromotion = (promotionObject) => {
+    const storedPromotions = this.getPromotions();
+    const promotionExists = storedPromotions.some(
+      storedPromotion => storedPromotion.promotionId === promotionObject.promotionId,
+    );
+
+    return promotionExists ? null : promotionObject;
+  };
 
   /**
    * [getPromotions             Returns all the promotions stored in the
    *                            twPromotions cookie or an empty array]
    * @return {Array}
    */
-  getPromotions() {
+  getPromotions = () => {
     const listOfPromotions = this.getCookieObject('twPromotions');
 
-    return listOfPromotions && listOfPromotions.length ? listOfPromotions : [];
-  }
+    return listOfPromotions && listOfPromotions.length ? [...listOfPromotions] : [];
+  };
 
   /**
    * [persistPromotions          Saves the new @promotions in the twPromotions
@@ -83,19 +87,27 @@ class PromotionService {
    * @param  {Array} promotions [Array containing all the promotions]
    * @return {Array}            [Promotions array]
    */
-  persistPromotions(promotions) {
+  persistPromotions = (promotions) => {
     this.setCookieObject('twPromotions', promotions);
 
     return promotions;
-  }
+  };
+
+  /**
+   * [savePromotions            Sorts and persists the promotions in the
+   *                            twPromotions cookie]
+   * @param  {Array} promotions
+   * @return {Array}
+   */
+  savePromotions = promotions => compose(this.persistPromotions, sortPromotions)(promotions);
 
   /**
    * [displayPromotion           Shows the promotion popover for the
    *                             @promotedElement]
    * @param  {Object} promotion [Promotion object]
-   * @return {Object}
+   * @return {Object}           [Promotion object or null]
    */
-  displayPromotion(promotion) {
+  displayPromotion = (promotion) => {
     if (promotion) {
       this.popoverService.showPopover(
         document.querySelector(promotion.promotedElement),
@@ -103,23 +115,21 @@ class PromotionService {
       );
     }
     return promotion;
-  }
+  };
 
   /**
    * [hidePromotion Hides the promotion popover]
    */
-  hidePromotion() {
+  hidePromotion = () => {
     this.popoverService.hidePopover();
-  }
+  };
 
   /**
    * [getCookieObject]
    * @param  {String} key    [Cookie key/id to use for lookup]
    * @return {Object}        [Returns the deserialized value of given cookie key]
    */
-  getCookieObject(key) {
-    return this.cookieService.getObject(key);
-  }
+  getCookieObject = key => this.cookieService.getObject(key);
 
   /**
    * [setCookieObject         Sets a object value for the given cookie key]
@@ -128,11 +138,11 @@ class PromotionService {
    * @param {Object} options [Options object. Contains properties such as path,
    *                          domain, expires, secure]
    */
-  setCookieObject(key, value, options) {
+  setCookieObject = (key, value, options) => {
     this.cookieService.putObject(key, value, options);
 
     return value;
-  }
+  };
 }
 
 /**
@@ -147,6 +157,52 @@ PromotionService.$inject = ['$cookies', 'twPopOverService'];
  */
 function checkPromotionCommence(promotion) {
   return promotion && promotion.promotionCommence <= Date.now() ? promotion : null;
+}
+
+/**
+ * [checkDisplayStatus         Checks if the promotion has been displayed or not]
+ * @param  {Object} promotion
+ * @return {Object}
+ */
+function checkDisplayStatus(promotion) {
+  return promotion && !promotion.promotionViewed ? promotion : null;
+}
+
+/**
+ * [markPromotionAsViewed            Sets a status object on the promotion
+ *                                   object to mark it as displayed to the
+ *                                   current user]
+ * @param  {Object} promotion
+ * @return {Object}
+ */
+function markPromotionAsViewed(promotion) {
+  return promotion
+    ? {
+      ...promotion,
+      promotionViewed: true,
+    }
+    : promotion;
+}
+
+/**
+ * [sortPromotions              Sort the promotions array before storing it in
+ *                              the cookies. Move all the viewed promotions to
+ *                              the start of the array, making the first half of
+ *                              the array home for the viewed promotions. The
+ *                              second half contains all the promotions that are
+ *                              due to be showed, ordered descending by their
+ *                              commence date, so that the most recent promotion
+ *                              is always last]
+ * @param  {Array} promotions
+ * @return {Array}
+ */
+function sortPromotions(promotions) {
+  const sortByPromotionCommence = curry(sortArray)('promotionCommence')(true);
+
+  const viewedPromotions = promotions.filter(promotion => promotion.promotionViewed);
+  const duePromotions = promotions.filter(promotion => !promotion.promotionViewed);
+
+  return [...viewedPromotions, ...sortByPromotionCommence(duePromotions)];
 }
 
 /**
@@ -195,7 +251,7 @@ function getReverseTail(array) {
  * @return {Array}
  */
 function pushToArray(array, element) {
-  return [...array, element];
+  return element ? [...array, element] : array;
 }
 
 /**

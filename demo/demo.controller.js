@@ -2,7 +2,8 @@ class DemoController {
   constructor(PromotionService) {
     const promotionObject = {
       promotedElement: '.promoted-element',
-      promotionCommence: Date.now(),
+      promotionCommence: Date.now() + 5000,
+      promotionId: 'test-promotion',
       promotionPopover: {
         placement: 'right-top',
         title: 'Transferwise',
@@ -13,7 +14,7 @@ class DemoController {
 
     PromotionService.addPromotion(promotionObject);
 
-    PromotionService.showLastPromotion();
+    PromotionService.showCommencingPromotion();
   }
 }
 
