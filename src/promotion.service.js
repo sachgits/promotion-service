@@ -14,9 +14,9 @@ class PromotionService {
    */
   addPromotion = (promotionObject) => {
     const pushToPromotions = curry(pushToArray)(getPromotions());
-    const addToPromotions = compose(pushToPromotions, this.checkExistingPromotion);
+    const addToPromotions = compose(pushToPromotions, checkExistingPromotion);
 
-    return compose(this.savePromotions, addToPromotions)(promotionObject);
+    return compose(savePromotions, addToPromotions)(promotionObject);
   };
 
   /**
@@ -27,57 +27,16 @@ class PromotionService {
    */
   showCommencingPromotion = cb =>
     compose(
-      this.addViewedPromotion,
-      curry(callCommencingCallback)(cbToCb(cb)),
-      markPromotionAsViewed,
       this.displayPromotion,
+
+      curry(callCommencingCallback)(cbToCb(cb)),
+
+      addViewedPromotion,
+      markPromotionAsViewed,
       checkDisplayStatus,
       checkPromotionCommence,
       getReverseHead,
     )(getPromotions());
-
-  /**
-   * [addViewedPromotion               Update the promotions by adding
-   *                                   back the last viewed promotion with a
-   *                                   'promotionViewed' flag]
-   * @param  {Object} viewedPromotion
-   * @return {Object}
-   */
-  addViewedPromotion = (promotion) => {
-    if (promotion) {
-      const filteredPromotions = getPromotions().filter(
-        savedPromotion => savedPromotion.promotionId !== promotion.promotionId,
-      );
-      const pushToPromotions = curry(pushToArray)(filteredPromotions);
-
-      return compose(this.savePromotions, pushToPromotions)(promotion);
-    }
-
-    return promotion;
-  };
-
-  /**
-   * [checkExistingPromotion            Checks if the promotion that we want to
-   *                                    add already exists in the promotion array]
-   * @param  {Object} promotionObject
-   * @return {Object}
-   */
-  checkExistingPromotion = (promotionObject) => {
-    const storedPromotions = getPromotions();
-    const promotionExists = storedPromotions.some(
-      storedPromotion => storedPromotion.promotionId === promotionObject.promotionId,
-    );
-
-    return promotionExists ? null : promotionObject;
-  };
-
-  /**
-   * [savePromotions            Sorts and persists the promotions in the
-   *                            twPromotions local storage]
-   * @param  {Array} promotions
-   * @return {Array}
-   */
-  savePromotions = promotions => compose(persistPromotions, sortPromotions)(promotions);
 
   /**
    * [displayPromotion           Shows the promotion popover for the
@@ -130,6 +89,31 @@ function persistPromotions(promotions) {
 }
 
 /**
+ * [savePromotions            Sorts and persists the promotions in the
+ *                            twPromotions local storage]
+ * @param  {Array} promotions
+ * @return {Array}
+ */
+function savePromotions(promotions) {
+  return compose(persistPromotions, sortPromotions)(promotions);
+}
+
+/**
+ * [checkExistingPromotion            Checks if the promotion that we want to
+ *                                    add already exists in the promotion array]
+ * @param  {Object} promotionObject
+ * @return {Object}
+ */
+function checkExistingPromotion(promotionObject) {
+  const storedPromotions = getPromotions();
+  const promotionExists = storedPromotions.some(
+    storedPromotion => storedPromotion.promotionId === promotionObject.promotionId,
+  );
+
+  return promotionExists ? null : promotionObject;
+}
+
+/**
  * [checkPromotionCommence     Checks if the promotion commence date has started]
  * @param  {Object} promotion [Promotion object]
  * @return {Object}
@@ -161,6 +145,26 @@ function markPromotionAsViewed(promotion) {
       promotionViewed: true,
     }
     : promotion;
+}
+
+/**
+ * [addViewedPromotion               Update the promotions by adding
+ *                                   back the last viewed promotion with a
+ *                                   'promotionViewed' flag]
+ * @param  {Object} viewedPromotion
+ * @return {Object}                 [Promotion object or null]
+ */
+function addViewedPromotion(promotion) {
+  if (promotion) {
+    const filteredPromotions = getPromotions().filter(
+      savedPromotion => savedPromotion.promotionId !== promotion.promotionId,
+    );
+    const pushToPromotions = curry(pushToArray)(filteredPromotions);
+
+    compose(savePromotions, pushToPromotions)(promotion);
+  }
+
+  return promotion;
 }
 
 /**
