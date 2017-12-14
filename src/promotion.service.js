@@ -1,3 +1,5 @@
+import { cbToCb } from './utils';
+
 class PromotionService {
   constructor($cookies, popoverService) {
     this.cookieService = $cookies;
@@ -12,7 +14,7 @@ class PromotionService {
    * @return {Array}                  [Promotions array]
    */
   addPromotion = (promotionObject) => {
-    const pushToPromotions = curry(pushToArray)(this.getPromotions());
+    const pushToPromotions = curry(pushToArray)(getPromotions());
     const addToPromotions = compose(pushToPromotions, this.checkExistingPromotion);
 
     return compose(this.savePromotions, addToPromotions)(promotionObject);
@@ -24,15 +26,16 @@ class PromotionService {
    *                            the promotion that is due to commence.]
    * @return {Object}          [Last promotion object or null]
    */
-  showCommencingPromotion = () =>
+  showCommencingPromotion = cb =>
     compose(
       this.addViewedPromotion,
+      curry(callCommencingCallback)(cbToCb(cb)),
       markPromotionAsViewed,
       this.displayPromotion,
       checkDisplayStatus,
       checkPromotionCommence,
       getReverseHead,
-    )(this.getPromotions());
+    )(getPromotions());
 
   /**
    * [addViewedPromotion               Update the promotions cookie by adding
@@ -43,7 +46,7 @@ class PromotionService {
    */
   addViewedPromotion = (promotion) => {
     if (promotion) {
-      const filteredPromotions = this.getPromotions().filter(
+      const filteredPromotions = getPromotions().filter(
         savedPromotion => savedPromotion.promotionId !== promotion.promotionId,
       );
       const pushToPromotions = curry(pushToArray)(filteredPromotions);
@@ -62,7 +65,7 @@ class PromotionService {
    * @return {Object}
    */
   checkExistingPromotion = (promotionObject) => {
-    const storedPromotions = this.getPromotions();
+    const storedPromotions = getPromotions();
     const promotionExists = storedPromotions.some(
       storedPromotion => storedPromotion.promotionId === promotionObject.promotionId,
     );
@@ -71,35 +74,12 @@ class PromotionService {
   };
 
   /**
-   * [getPromotions             Returns all the promotions stored in the
-   *                            twPromotions cookie or an empty array]
-   * @return {Array}
-   */
-  getPromotions = () => {
-    const listOfPromotions = this.getCookieObject('twPromotions');
-
-    return listOfPromotions && listOfPromotions.length ? [...listOfPromotions] : [];
-  };
-
-  /**
-   * [persistPromotions          Saves the new @promotions in the twPromotions
-   *                             cookie]
-   * @param  {Array} promotions [Array containing all the promotions]
-   * @return {Array}            [Promotions array]
-   */
-  persistPromotions = (promotions) => {
-    this.setCookieObject('twPromotions', promotions);
-
-    return promotions;
-  };
-
-  /**
    * [savePromotions            Sorts and persists the promotions in the
    *                            twPromotions cookie]
    * @param  {Array} promotions
    * @return {Array}
    */
-  savePromotions = promotions => compose(this.persistPromotions, sortPromotions)(promotions);
+  savePromotions = promotions => compose(persistPromotions, sortPromotions)(promotions);
 
   /**
    * [displayPromotion           Shows the promotion popover for the
@@ -151,6 +131,27 @@ class PromotionService {
 PromotionService.$inject = ['$cookies', 'twPopOverService'];
 
 /**
+ * [getPromotions             Returns all the promotions stored in the
+ *                            twPromotions cookie or an empty array]
+ * @return {Array}
+ */
+function getPromotions() {
+  const listOfPromotions = getLocalStorageObject('twPromotions');
+
+  return listOfPromotions && listOfPromotions.length ? [...listOfPromotions] : [];
+}
+
+/**
+ * [persistPromotions          Saves the new @promotions in the twPromotions
+ *                             cookie]
+ * @param  {Array} promotions [Array containing all the promotions]
+ * @return {Array}            [Promotions array]
+ */
+function persistPromotions(promotions) {
+  return setLocalStorageObject('twPromotions', promotions);
+}
+
+/**
  * [checkPromotionCommence     Checks if the promotion commence date has started]
  * @param  {Object} promotion [Promotion object]
  * @return {Object}
@@ -185,6 +186,21 @@ function markPromotionAsViewed(promotion) {
 }
 
 /**
+ * [callCommencingCallback           Provide a callback to the @showCommencingPromotion,
+ *                                   call it with the commencing promotion object]
+ * @param  {Function} callback
+ * @param  {Object}   promotion
+ * @return {Object}
+ */
+function callCommencingCallback(callback, promotion) {
+  if (promotion) {
+    callback(promotion);
+  }
+
+  return promotion;
+}
+
+/**
  * [sortPromotions              Sort the promotions array before storing it in
  *                              the cookies. Move all the viewed promotions to
  *                              the start of the array, making the first half of
@@ -203,6 +219,31 @@ function sortPromotions(promotions) {
   const duePromotions = promotions.filter(promotion => !promotion.promotionViewed);
 
   return [...viewedPromotions, ...sortByPromotionCommence(duePromotions)];
+}
+
+/**
+ * [getLocalStorageObject        Get the UTF-16 String value stored at @key in
+ *                               the local storage]
+ * @param  {String} key         [A DOMString containing the name of the key you
+ *                               want to create/update.]
+ * @return {Array}
+ */
+function getLocalStorageObject(key) {
+  return JSON.parse(localStorage.getItem(key));
+}
+
+/**
+ * [setLocalStorageObject       Add that key to the storage, or update that key's
+ *                              value if it already exists.]
+ * @param {String} key         [A DOMString containing the name of the key you
+ *                              want to create/update.]
+ * @param {Object} value       [An object that will get serialized and added to
+ *                              the @key value]
+ */
+function setLocalStorageObject(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+
+  return value;
 }
 
 /**
