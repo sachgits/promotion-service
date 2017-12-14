@@ -1,14 +1,13 @@
 import { cbToCb } from './utils';
 
 class PromotionService {
-  constructor($cookies, popoverService) {
-    this.cookieService = $cookies;
+  constructor(popoverService) {
     this.popoverService = popoverService;
   }
 
   /**
    * [addPromotion                     Adds a new promotion to the twPromotions
-   *                                   cookie array]
+   *                                   local storage array]
    * @param  {Object} promotionObject [Object containing the promotion data and
    *                                   metadata]
    * @return {Array}                  [Promotions array]
@@ -22,8 +21,8 @@ class PromotionService {
 
   /**
    * [showCommencingPromotion   Displays the popover for the last promotion
-   *                            stored in the twPromotions cookies array, i.e.
-   *                            the promotion that is due to commence.]
+   *                            stored in the twPromotions local storage array,
+   *                            i.e. the promotion that is due to commence.]
    * @return {Object}          [Last promotion object or null]
    */
   showCommencingPromotion = cb =>
@@ -38,9 +37,9 @@ class PromotionService {
     )(getPromotions());
 
   /**
-   * [addViewedPromotion               Update the promotions cookie by adding
+   * [addViewedPromotion               Update the promotions by adding
    *                                   back the last viewed promotion with a
-   *                                   'isRead' flag]
+   *                                   'promotionViewed' flag]
    * @param  {Object} viewedPromotion
    * @return {Object}
    */
@@ -59,8 +58,7 @@ class PromotionService {
 
   /**
    * [checkExistingPromotion            Checks if the promotion that we want to
-   *                                    add already exists in the promotion
-   *                                    cookies array]
+   *                                    add already exists in the promotion array]
    * @param  {Object} promotionObject
    * @return {Object}
    */
@@ -75,7 +73,7 @@ class PromotionService {
 
   /**
    * [savePromotions            Sorts and persists the promotions in the
-   *                            twPromotions cookie]
+   *                            twPromotions local storage]
    * @param  {Array} promotions
    * @return {Array}
    */
@@ -103,36 +101,16 @@ class PromotionService {
   hidePromotion = () => {
     this.popoverService.hidePopover();
   };
-
-  /**
-   * [getCookieObject]
-   * @param  {String} key    [Cookie key/id to use for lookup]
-   * @return {Object}        [Returns the deserialized value of given cookie key]
-   */
-  getCookieObject = key => this.cookieService.getObject(key);
-
-  /**
-   * [setCookieObject         Sets a object value for the given cookie key]
-   * @param {String} key     [Cookie key/id to use for lookup]
-   * @param {Object} value   [Cookie object value to be stored]
-   * @param {Object} options [Options object. Contains properties such as path,
-   *                          domain, expires, secure]
-   */
-  setCookieObject = (key, value, options) => {
-    this.cookieService.putObject(key, value, options);
-
-    return value;
-  };
 }
 
 /**
  * Dependency injection
  */
-PromotionService.$inject = ['$cookies', 'twPopOverService'];
+PromotionService.$inject = ['twPopOverService'];
 
 /**
  * [getPromotions             Returns all the promotions stored in the
- *                            twPromotions cookie or an empty array]
+ *                            twPromotions local storage or an empty array]
  * @return {Array}
  */
 function getPromotions() {
@@ -143,7 +121,7 @@ function getPromotions() {
 
 /**
  * [persistPromotions          Saves the new @promotions in the twPromotions
- *                             cookie]
+ *                             local storage key]
  * @param  {Array} promotions [Array containing all the promotions]
  * @return {Array}            [Promotions array]
  */
@@ -201,12 +179,12 @@ function callCommencingCallback(callback, promotion) {
 }
 
 /**
- * [sortPromotions              Sort the promotions array before storing it in
- *                              the cookies. Move all the viewed promotions to
- *                              the start of the array, making the first half of
- *                              the array home for the viewed promotions. The
- *                              second half contains all the promotions that are
- *                              due to be showed, ordered descending by their
+ * [sortPromotions              Sort the promotions array before storing it in.
+ *                              Move all the viewed promotions to the start of
+ *                              the array, making the first half of the array
+ *                              home for the viewed promotions.
+ *                              The second half contains all the promotions that
+ *                              are due to be showed, ordered descending by their
  *                              commence date, so that the most recent promotion
  *                              is always last]
  * @param  {Array} promotions

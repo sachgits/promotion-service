@@ -26,7 +26,6 @@
   "homepage": "https://github.com/transferwise/promotion-service#readme",
   "devDependencies": {
     "angular": "^1.5.0",
-    "angular-cookies": "^1.5.0",
     "angular-mocks": "^1.5.0",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
@@ -50,7 +49,6 @@
   },
   "peerDependencies": {
     "angular": "^1.5.0",
-    "angular-cookies": "^1.5.0",
     "bootstrap": "git+https://github.com/transferwise/bootstrap.git",
     "tw-styleguide-components": "git+https://github.com/transferwise/styleguide-components.git#v2.7.0",
     "webpack": "^3.1.0"
