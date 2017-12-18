@@ -25,8 +25,8 @@
   },
   "homepage": "https://github.com/transferwise/promotion-service#readme",
   "devDependencies": {
-    "angular": "^1.5.0",
-    "angular-mocks": "^1.5.0",
+    "angular": "~1.5.8",
+    "angular-mocks": "~1.5.8",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
@@ -48,7 +48,7 @@
     "webpack-dev-server": "^2.9.3"
   },
   "peerDependencies": {
-    "angular": "^1.5.0",
+    "angular": "~1.5.8",
     "bootstrap": "git+https://github.com/transferwise/bootstrap.git",
     "tw-styleguide-components": "github:transferwise/styleguide-components#v2.7.1",
     "webpack": "^3.1.0"
