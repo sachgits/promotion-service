@@ -44,11 +44,6 @@ module.exports = {
         var: "''",
         commonjs: 'tw-styleguide-components/dist/js/styleguide-components',
         commonjs2: 'tw-styleguide-components/dist/js/styleguide-components'
-      },
-      'angular-cookies': {
-        var: "'ngCookies'",
-        commonjs: 'angular-cookies',
-        commonjs2: 'angular-cookies'
       }
     }
   ]
