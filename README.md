@@ -56,7 +56,7 @@ class AwesomeController {
 
     PromotionService.addPromotion(promotionObject);
 
-    PromotionService.showLastPromotion();
+    PromotionService.showCommencingPromotion();
   }
 }
 
