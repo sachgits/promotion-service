@@ -20,11 +20,11 @@ describe('Promotion service', () => {
 
   beforeEach(angular.mock.module('tw.promotion'));
 
-  beforeEach(
+  beforeEach(() => {
     angular.mock.inject(($injector) => {
       promotionServiceInstance = $injector.get('tw.promotionService');
-    }),
-  );
+    });
+  });
 
   test('Promotion service loaded', () => {
     expect(typeof promotionServiceInstance).toBe('object');

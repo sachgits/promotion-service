@@ -29,5 +29,11 @@ module.exports = {
     contentBase: path.join(__dirname, 'demo'),
     publicPath: '/dist/',
     port: 1666
-  }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      _: 'underscore',
+      $: 'jquery',
+    }),
+  ]
 };

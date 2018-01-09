@@ -1,8 +1,15 @@
 import { cbToCb } from './utils';
 
 class PromotionService {
-  constructor(popoverService) {
+  constructor($rootScope, AnalyticsService, Config, popoverService) {
+    this.$rootScope = $rootScope;
+
+    this.AnalyticsService = AnalyticsService;
+    this.Config = Config;
+
     this.popoverService = popoverService;
+
+    this.registerMixpanelEventListeners();
   }
 
   /**
@@ -27,12 +34,16 @@ class PromotionService {
    */
   showCommencingPromotion = cb =>
     compose(
+      this.reportPromotionOpen,
       this.displayPromotion,
 
       curry(callCommencingCallback)(cbToCb(cb)),
 
       addViewedPromotion,
       markPromotionAsViewed,
+
+      this.cachePromotionObject,
+
       checkDisplayStatus,
       checkPromotionCommence,
       getReverseHead,
@@ -60,12 +71,100 @@ class PromotionService {
   hidePromotion = () => {
     this.popoverService.hidePopover();
   };
+
+  /**
+   * [cachePromotionObject Cache the promotion object in order to access it from
+   *                       additional functions, such as mixpanel event trackers]
+   * @type {Object}
+   */
+  cachePromotionObject = (promotion) => {
+    if (promotion) {
+      this.cachedPromotion = promotion;
+    }
+
+    return promotion;
+  };
+
+  /**
+   * [reportPromotionOpen        Submit a mixpanel event when the promotion is
+   *                             displayed to the user]
+   * @param  {Object} promotion
+   * @return {Object}           [Promotion object or null]
+   */
+  reportPromotionOpen = (promotion) => {
+    if (promotion) {
+      this.reportMixpanelEvent('open', promotion);
+    }
+
+    return promotion;
+  };
+
+  /**
+   * [reportPromotionClick       Submit a mixpanel event when the user interacts
+   *                             with the promotion]
+   * @param  {Object} promotion
+   * @return {Object}           [Promotion object or null]
+   */
+  reportPromotionClick = () => {
+    if (this.cachedPromotion) {
+      this.reportMixpanelEvent('click', this.cachedPromotion);
+    }
+
+    return this.cachedPromotion;
+  };
+
+  /**
+   * [reportPromotionClose       Submit a mixpanel event when the user closes
+   *                             the promotion]
+   * @param  {Object} promotion
+   * @return {Object}           [Promotion object or null]
+   */
+  reportPromotionClose = () => {
+    if (this.cachedPromotion) {
+      this.reportMixpanelEvent('close', this.cachedPromotion);
+    }
+
+    return this.cachedPromotion;
+  };
+
+  /**
+   * [reportMixpanelEvent       Submit mixpanel events regarding different
+   *                            interactions with the promotion popover]
+   * @param  {String} event
+   * @param  {Object} promotion
+   * @return {Object}
+   */
+  reportMixpanelEvent = (event, promotion) => {
+    if (promotion) {
+      const params = {
+        userId: this.Config.get('userId'),
+        promotionId: promotion.promotionId,
+      };
+
+      const mixpanelEvent = `promotion:${event}`;
+
+      this.AnalyticsService.trackMixpanelEvent(mixpanelEvent, params);
+    }
+
+    return promotion;
+  };
+
+  /**
+   * [registerMixpanelEventListeners  Popover component broadcasts the following
+   *                                  events, which we need in order to report
+   *                                  the interaction with the promotion popover]
+   * @return {void}
+   */
+  registerMixpanelEventListeners = () => {
+    this.$rootScope.$on('promotion:click', this.reportPromotionClick);
+    this.$rootScope.$on('promotion:close', this.reportPromotionClose);
+  }
 }
 
 /**
  * Dependency injection
  */
-PromotionService.$inject = ['twPopOverService'];
+PromotionService.$inject = ['$rootScope', 'AnalyticsService', 'Config', 'twPopOverService'];
 
 /**
  * [getPromotions             Returns all the promotions stored in the

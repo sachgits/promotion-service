@@ -40,10 +40,25 @@ module.exports = {
   externals: [
     {
       angular: 'angular',
+      'angular-cookies': "'ngCookies'",
+      'angular-sanitize': "'ngSanitize'",
+      'angular-translate': "'pascalprecht.translate'",
+      'angular-translate-interpolation-messageformat': "''",
+
+      underscore: '_',
+      jquery: '$',
+
+      unorm: "''",
+
       'tw-styleguide-components/dist/js/styleguide-components': {
         var: "''",
         commonjs: 'tw-styleguide-components/dist/js/styleguide-components',
         commonjs2: 'tw-styleguide-components/dist/js/styleguide-components'
+      },
+      '@transferwise/frontend-common/dist/tw-common': {
+        var: "''",
+        commonjs: '@transferwise/frontend-common/dist/tw-common',
+        commonjs2: '@transferwise/frontend-common/dist/tw-common'
       }
     }
   ]
