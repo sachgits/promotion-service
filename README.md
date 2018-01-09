@@ -56,7 +56,18 @@ class AwesomeController {
 
     PromotionService.addPromotion(promotionObject);
 
-    PromotionService.showCommencingPromotion();
+    PromotionService.showCommencingPromotion(function(promotionObject) {
+      /**
+       * If the promotion has commenced, the promotion object is exposed,
+       * otherwise the callback is called with a null argument
+       */
+
+      if (promotionObject) {
+        /**
+         * Promotion commenced and its object is now available
+         */
+      }
+    });
   }
 }
 
@@ -126,9 +137,13 @@ var promotionObject = {
 
 ### showCommencingPromotion
 
-> `function()`
+> `function(callback: function)`
 
 Shows the last promotion in the list of promotions, if its commence date has started, otherwise it doesn't display anything and it doesn't alter the promotions array. If the commence date has started, the promotion is displayed using the `PopoverService`.
+
+The callback passed to the `showCommencingPromotion` function is called with an argument. That argument is the promotion object (the entire promotion object that was added to the promotions).
+
+If the promotion has commenced, i.e. it was displayed, the callback is called with the promotion object, otherwise it is called with `null`.
 
 ### Tasks
 
@@ -141,13 +156,13 @@ npm install
 #### Run in development mode
 
 ```
-npm run dev
+npm run start
 ```
 
 #### Test and lint
 
 ```
-npm test
+npm run test
 ```
 
 #### Test with watch
