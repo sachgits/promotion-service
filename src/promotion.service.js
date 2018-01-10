@@ -34,10 +34,10 @@ class PromotionService {
    */
   showCommencingPromotion = cb =>
     compose(
+      curry(callCommencingCallback)(cbToCb(cb)),
+
       this.reportPromotionOpen,
       this.displayPromotion,
-
-      curry(callCommencingCallback)(cbToCb(cb)),
 
       addViewedPromotion,
       markPromotionAsViewed,
