@@ -9,7 +9,7 @@
 
 You want to promote various events to the user.
 
-## This solution
+## The solution
 
 With the promotion service, you register promotions in which you nominate the highlighted element for the promotion and the event that he is promoting.
 
@@ -58,15 +58,9 @@ class AwesomeController {
 
     PromotionService.showCommencingPromotion(function(promotionObject) {
       /**
-       * If the promotion has commenced, the promotion object is exposed,
-       * otherwise the callback is called with a null argument
+       * This callback is called when the most recent promotion has commenced,
+       * exposing the promotion object
        */
-
-      if (promotionObject) {
-        /**
-         * Promotion commenced and its object is now available
-         */
-      }
     });
   }
 }
