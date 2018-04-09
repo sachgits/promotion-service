@@ -8,8 +8,10 @@ import 'angular-translate-interpolation-messageformat';
 import 'tw-styleguide-components/dist/js/styleguide-components';
 import '@transferwise/frontend-common/dist/tw-common';
 
-import promotionService from './promotion.service';
+import PromotionService from './promotion.service';
+
+export const promotionServiceName = 'tw.promotionService';
 
 export default angular
   .module('tw.promotion', ['tw.styleguide-components', 'tw.common.config', 'tw.common.analytics'])
-  .service('tw.promotionService', promotionService).name;
+  .service(promotionServiceName, PromotionService).name;

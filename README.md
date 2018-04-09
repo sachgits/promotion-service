@@ -22,7 +22,7 @@ With the promotion service, you register promotions in which you nominate the hi
 ## Installation
 
 ```
-npm install git+ssh://git@github.com/transferwise/promotion-service.git#{version-tag}
+npm install @transferwise/promotion-service
 ```
 
 ## Usage
@@ -30,17 +30,19 @@ npm install git+ssh://git@github.com/transferwise/promotion-service.git#{version
 > index.js
 
 ```javascript
-import awesomeController from './awesome.controller';
-import promotionService from 'promotion-service';
+import AwesomeController from './awesome.controller';
+import Promotion from '@transferwise/promotion-service';
 
 export default angular
-  .module('MyAwesomeModule', [promotionService])
-  .controller('MyAwesomeController', awesomeController).name;
+  .module('MyAwesomeModule', [Promotion])
+  .controller('MyAwesomeController', AwesomeController).name;
 ```
 
 > awesome.controller.js
 
 ```javascript
+import { promotionServiceName } from '@transferwise/promotion-service';
+
 class AwesomeController {
   constructor(PromotionService) {
     var promotionObject = {
@@ -56,7 +58,7 @@ class AwesomeController {
 
     PromotionService.addPromotion(promotionObject);
 
-    PromotionService.showCommencingPromotion(function(promotionObject) {
+    PromotionService.showCommencingPromotion(function(object) {
       /**
        * This callback is called when the most recent promotion has commenced,
        * exposing the promotion object
@@ -65,7 +67,7 @@ class AwesomeController {
   }
 }
 
-AwesomeController.$inject = ['PromotionService'];
+AwesomeController.$inject = [promotionServiceName];
 
 export default AwesomeController;
 
