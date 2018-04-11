@@ -1,3 +1,6 @@
+# v2.3.1
+## Starts releasing to GitHub, uses styleguide-components from npm
+
 # v2.3.0
 ## Adds UMD, change readme
 

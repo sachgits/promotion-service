@@ -5,7 +5,7 @@ import 'angular-sanitize';
 import 'angular-translate';
 import 'angular-translate-interpolation-messageformat';
 
-import 'tw-styleguide-components/dist/js/styleguide-components';
+import '@transferwise/styleguide-components/js/styleguide-components';
 import '@transferwise/frontend-common/dist/tw-common';
 
 import PromotionService from './promotion.service';

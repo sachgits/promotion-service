@@ -72,10 +72,10 @@ module.exports = {
         commonjs2: 'unorm',
       },
 
-      'tw-styleguide-components/dist/js/styleguide-components': {
+      '@transferwise/styleguide-components/js/styleguide-components': {
         var: "''",
-        commonjs: 'tw-styleguide-components/dist/js/styleguide-components',
-        commonjs2: 'tw-styleguide-components/dist/js/styleguide-components',
+        commonjs: '@transferwise/styleguide-components',
+        commonjs2: '@transferwise/styleguide-components',
       },
       '@transferwise/frontend-common/dist/tw-common': {
         var: "''",
