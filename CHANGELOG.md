@@ -1,3 +1,6 @@
+# v2.3.2
+## Swapping Array.prototype.some with Array.prototype.filter for promotion existence check 
+
 # v2.3.1
 ## Starts releasing to GitHub, uses styleguide-components from npm
 

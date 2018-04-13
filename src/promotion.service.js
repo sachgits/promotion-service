@@ -57,11 +57,16 @@ class PromotionService {
    */
   displayPromotion = (promotion) => {
     if (promotion) {
-      this.popoverService.showPopover(
-        document.querySelector(promotion.promotedElement),
-        promotion.promotionPopover,
-      );
+      const promotedDomElement = document.querySelector(promotion.promotedElement);
+
+      if (promotedDomElement) {
+        this.popoverService.showPopover(
+          promotedDomElement,
+          promotion.promotionPopover,
+        );
+      }
     }
+
     return promotion;
   };
 
@@ -205,9 +210,9 @@ function savePromotions(promotions) {
  */
 function checkExistingPromotion(promotionObject) {
   const storedPromotions = getPromotions();
-  const promotionExists = storedPromotions.some(
+  const promotionExists = storedPromotions.filter(
     storedPromotion => storedPromotion.promotionId === promotionObject.promotionId,
-  );
+  ).length > 0;
 
   return promotionExists ? null : promotionObject;
 }
@@ -218,7 +223,7 @@ function checkExistingPromotion(promotionObject) {
  * @return {Object}
  */
 function checkPromotionCommence(promotion) {
-  return promotion && promotion.promotionCommence <= Date.now() ? promotion : null;
+  return promotion && Date.now() >= promotion.promotionCommence ? promotion : null;
 }
 
 /**
@@ -255,7 +260,8 @@ function markPromotionAsViewed(promotion) {
  */
 function addViewedPromotion(promotion) {
   if (promotion) {
-    const filteredPromotions = getPromotions().filter(
+    const promotions = getPromotions();
+    const filteredPromotions = promotions.filter(
       savedPromotion => savedPromotion.promotionId !== promotion.promotionId,
     );
     const pushToPromotions = curry(pushToArray)(filteredPromotions);

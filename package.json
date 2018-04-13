@@ -1,10 +1,13 @@
 {
   "name": "@transferwise/promotion-service",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Promotion service",
   "main": "dist/index.js",
   "author": "TransferWise Ltd.",
   "license": "UNLICENSED",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "copy:bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css demo/lib/",
     "copy:underscore": "cp node_modules/underscore/underscore-min.js demo/lib/",
